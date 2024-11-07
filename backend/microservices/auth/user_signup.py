@@ -72,8 +72,7 @@ def put_user_to_table(user_id: str, email_id: str, phone: str,
     user["email"] = email_id
     user["user_id"] = user_id
     user["phone"] = phone
-    user['wallet_id'] = user_sub
-
+    
     try:
         dynamodb_utilities.put_user(user)
     except ClientError as err:
