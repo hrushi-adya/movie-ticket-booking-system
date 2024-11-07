@@ -18,7 +18,6 @@ user_sub = None
 def lambda_handler(event, context):
     if 'httpMethod' not in event:
         raise RuntimeError('No HttpMethod')
-
     logger.info("Event:")
     logger.info(json.dumps(event))
 
