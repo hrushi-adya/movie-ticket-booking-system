@@ -67,7 +67,7 @@ def verify_sign_up_user(code:str, user_id:str):
     client_id = constants.CLIENT_ID
     client_secret = constants.CLIENT_SECRET
 
-    cognito = CognitoIdentityWrapper(cognito_idp_client = cognito_idp_client, user_pool_id = user_pool_id, 
+    cognito = CognitoIdentityProviderWrapper(cognito_idp_client = cognito_idp_client, user_pool_id = user_pool_id, 
                                      client_id = client_id, client_secret = client_secret)
     
     try:
