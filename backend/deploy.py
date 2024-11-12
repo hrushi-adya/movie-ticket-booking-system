@@ -72,8 +72,8 @@ if not lambda_functions:
     print('No Lambda Functions defined')
 
 lambda_default_conf = json.dumps(config.get('lambda_function_default'))
-lambda_client = boto3.client('lambda', aws_access_key_id='AKIA2HOIRKVKNZZK6NK5',
-                             aws_secret_access_key='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',
+lambda_client = boto3.client('lambda', aws_access_key_id='',
+                             aws_secret_access_key='',
                              region_name='us-east-1')
 
 

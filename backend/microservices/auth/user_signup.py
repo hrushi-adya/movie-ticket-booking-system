@@ -7,6 +7,7 @@ from botocore.exceptions import ClientError
 from model import constants
 from cognito import CognitoIdentityProviderWrapper
 
+from model.LambdaResponse import SimpleResponse
 from util import dynamodb_utilities
 
 logger = logging.getLogger()
@@ -37,6 +38,12 @@ def lambda_handler(event, context):
     last_name = body["last_name"]
 
     # Check if user already present
+    sign_up_user(user_id, profile_type, password, email_id, phone)
+    user = put_user_to_table(user_id, email_id, phone, profile_type, first_name, last_name)
+
+    return SimpleResponse({
+        'user': user
+    })
 
 
 # Sign Up User API Call
