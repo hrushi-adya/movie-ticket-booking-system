@@ -1,8 +1,8 @@
 {
-  "artifact": "s3://703184590164-us-east-development-artifact/lambda.zip",
+  "artifact": "s3://myapp-us-east-development-artifact/lambda.zip",
   "lambda_function_default": {
-    "Runtime": "python3.9",
-    "Role": "arn:aws:iam::703184590164:role/LambdaAutomationRole",
+    "Runtime": "python3.10",
+    "Role": "arn:aws:iam::891377236973:role/lambda-execution-role",
     "Timeout": 30,
     "MemorySize": 2048,
     "Environment": {
@@ -13,14 +13,14 @@
       }
     },
     "Layers": [
-      "python-deps-layer:1"
+      "arn:aws:lambda:us-east-2:891377236973:layer:MTB-python-deps-layer:1"
     ]
   },
   "lambda_functions": [
     {
       "FunctionName": "MTB-API-SignUp-DEV",
       "Description": "Movie API - Sign Up Operation",
-      "Handler": "microservice.auth.user_signup.lambda_handler"
+      "Handler": "microservices.auth.user_signup.lambda_handler"
     }
   ]
 
