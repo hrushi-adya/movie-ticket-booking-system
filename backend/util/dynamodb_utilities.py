@@ -14,7 +14,7 @@ def put_user(user: dict):
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
-        print(f"User Key assigned: {user['profile_id']}")
+        print(f"User Key assigned: {user['user_id']}")
 
         # Update metadata
         timestamp = generate_utc_timestamp()
@@ -30,7 +30,7 @@ def put_user(user: dict):
         })
 
         return {
-            'key': user['profile_id']
+            'key': user['user_id']
         }
     except Exception as e:
-        raise Exception('Error querying DynamoDB when put an user', inner=e)
+        raise Exception('Error querying DynamoDB when put an user')

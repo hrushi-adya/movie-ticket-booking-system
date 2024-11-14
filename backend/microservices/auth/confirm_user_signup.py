@@ -43,11 +43,11 @@ def lambda_handler(event, context):
         raise Exception('Internal server error')
     
 def resend_confirmation_code(user_id:str):
-    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-1')
+    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-2')
 
-    user_pool_id = constants.USER_POOL_ID
-    client_id = constants.CLIENT_ID
-    client_secret = constants.CLIENT_SECRET
+    user_pool_id = constants.user_pool_id
+    client_id = constants.client_id
+    client_secret = constants.client_secret
 
     cognito = CognitoIdentityProviderWrapper(cognito_idp_client = cognito_idp_client, user_pool_id = user_pool_id, 
                                      client_id = client_id, client_secret = client_secret)
@@ -61,11 +61,11 @@ def resend_confirmation_code(user_id:str):
     return response
 
 def verify_sign_up_user(code:str, user_id:str):
-    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-1')
+    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-2')
 
-    user_pool_id = constants.USER_POOL_ID
-    client_id = constants.CLIENT_ID
-    client_secret = constants.CLIENT_SECRET
+    user_pool_id = constants.user_pool_id
+    client_id = constants.client_id
+    client_secret = constants.client_secret
 
     cognito = CognitoIdentityProviderWrapper(cognito_idp_client = cognito_idp_client, user_pool_id = user_pool_id, 
                                      client_id = client_id, client_secret = client_secret)

@@ -10,7 +10,7 @@ logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
-        
+    
         if 'httpMethod' not in event:
             raise Exception('No httpMethod')
     
@@ -35,7 +35,7 @@ def lambda_handler(event, context):
             raise Exception('Internal server error')
         
 def sign_in_user(user_id:str, password:str):
-    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-1')
+    cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-2')
 
     user_pool_id = constants.USER_POOL_ID
     client_id = constants.CLIENT_ID

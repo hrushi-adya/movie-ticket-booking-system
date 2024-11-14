@@ -1,7 +1,7 @@
 {
   "artifact": "s3://myapp-us-east-development-artifact/lambda.zip",
   "lambda_function_default": {
-    "Runtime": "python3.10",
+    "Runtime": "python3.11",
     "Role": "arn:aws:iam::891377236973:role/lambda-execution-role",
     "Timeout": 30,
     "MemorySize": 2048,

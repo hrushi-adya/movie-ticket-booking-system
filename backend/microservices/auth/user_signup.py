@@ -13,10 +13,10 @@ from util import dynamodb_utilities
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-user_sub = None
 
 
 def lambda_handler(event, context):
+    print("Event: ", event)
     if 'httpMethod' not in event:
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
@@ -38,7 +38,7 @@ def lambda_handler(event, context):
     last_name = body["last_name"]
 
     # Check if user already present
-    sign_up_user(user_id, profile_type, password, email_id, phone)
+    # sign_up_user(user_id, profile_type, password, email_id, phone)
     user = put_user_to_table(user_id, email_id, phone, profile_type, first_name, last_name)
 
     return SimpleResponse({
@@ -49,7 +49,7 @@ def lambda_handler(event, context):
 # Sign Up User API Call
 def sign_up_user(user_id: str, profile_type: str, password: str, email_id: str, phone: str):
     cognito_idp_client = boto3.client('cognito-idp',
-                                      region_name="us-east-1")
+                                      region_name="us-east-2")
 
     user_pool_id = constants.user_pool_id
     client_id = constants.client_id
@@ -72,12 +72,11 @@ def sign_up_user(user_id: str, profile_type: str, password: str, email_id: str, 
 def put_user_to_table(user_id: str, email_id: str, phone: str,
                       profile_type: str, first_name: str, last_name: str):
     user = {}
-    user["profile_id"] = user_sub
+    user["user_id"] = user_id
     user["profile_type"] = profile_type
     user["first_name"] = first_name
     user["last_name"] = last_name
     user["email"] = email_id
-    user["user_id"] = user_id
     user["phone"] = phone
     
     try:

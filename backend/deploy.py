@@ -15,7 +15,7 @@ PATTERNS = [
     'microservice',
     'model',
     # 'schemas',
-    # 'util',
+    'util',
     'cognito',
     # 'location'
 ]
@@ -56,9 +56,9 @@ def parse_s3_url(s3url):
 
 
 # Upload to S3
-s3_client = boto3.client('s3',aws_access_key_id='',
-                         aws_secret_access_key='',
-                         region_name='us-east-1')
+s3_client = boto3.client('s3',aws_access_key_id='AKIA47CRZHPWX7RCZG7L',
+                         aws_secret_access_key='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',
+                         region_name='us-east-2')
 [bucket, key] = parse_s3_url(config['artifact'])
 s3_upload_res = s3_client.upload_file(LOCAL_FILENAME, bucket, key, ExtraArgs={
     'ServerSideEncryption': "AES256"
@@ -72,9 +72,9 @@ if not lambda_functions:
     print('No Lambda Functions defined')
 
 lambda_default_conf = json.dumps(config.get('lambda_function_default'))
-lambda_client = boto3.client('lambda', aws_access_key_id='',
-                             aws_secret_access_key='',
-                             region_name='us-east-1')
+lambda_client = boto3.client('lambda', aws_access_key_id='AKIA47CRZHPWX7RCZG7L',
+                             aws_secret_access_key='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',
+                             region_name='us-east-2')
 
 
 def update_lambda_function_task(func, lambda_client):
