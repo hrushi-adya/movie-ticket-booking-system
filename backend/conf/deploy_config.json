@@ -21,6 +21,16 @@
       "FunctionName": "MTB-API-SignUp-DEV",
       "Description": "Movie API - Sign Up Operation",
       "Handler": "microservices.auth.user_signup.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-ConfirmSignUp-DEV",
+      "Description": "Movie API - Confirm Sign Up Operation",
+      "Handler": "microservices.auth.confirm_user_signup.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-SignIn-DEV",
+      "Description": "Movie API - Sign Up Operation",
+      "Handler": "microservices.auth.user_signin.lambda_handler"
     }
   ]
 

@@ -37,15 +37,15 @@ def lambda_handler(event, context):
 def sign_in_user(user_id:str, password:str):
     cognito_idp_client = boto3.client('cognito-idp', region_name='us-east-2')
 
-    user_pool_id = constants.USER_POOL_ID
-    client_id = constants.CLIENT_ID
-    client_secret = constants.CLIENT_SECRET
+    user_pool_id = constants.user_pool_id
+    client_id = constants.client_id
+    client_secret = constants.client_secret
 
     cognito = CognitoIdentityProviderWrapper(cognito_idp_client = cognito_idp_client, user_pool_id = user_pool_id, 
                                      client_id = client_id, client_secret = client_secret)
     
     try:
-        response = cognito.sign_in_user(user_id, password)
+        response = cognito.start_sign_in(user_id, password)
     except ClientError as err:
         error_message = err.response['Error']['Message']
         logger.info(err.response['Error']['Message'])
