@@ -37,8 +37,7 @@ def lambda_handler(event, context):
     first_name = body["first_name"]
     last_name = body["last_name"]
 
-    # Check if user already present
-    # sign_up_user(user_id, profile_type, password, email_id, phone)
+    sign_up_user(user_id, profile_type, password, email_id, phone)
     user = put_user_to_table(user_id, email_id, phone, profile_type, first_name, last_name)
 
     return SimpleResponse({
