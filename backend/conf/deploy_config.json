@@ -8,7 +8,10 @@
     "Environment": {
       "Variables": {
         "ENVIRONMENT": "dev",
-        "USER_TABLE": "user_info"
+        "USER_TABLE": "user_info",
+        "MOVIE_TABLE": "movie_details",
+        "TICKET_TABLE": "ticket_details",
+        "TRANSACTION_TABLE": "transaction_details"
 
       }
     },
@@ -29,8 +32,18 @@
     },
     {
       "FunctionName": "MTB-API-SignIn-DEV",
-      "Description": "Movie API - Sign Up Operation",
+      "Description": "Movie API - Sign In Operation",
       "Handler": "microservices.auth.user_signin.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-AddMovie-DEV",
+      "Description": "Movie API - Add Movie Operation",
+      "Handler": "microservices.ddb-operations.movie.add_movie.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-BookTicket-DEV",
+      "Description": "Movie API - Book Ticket Operation",
+      "Handler": "microservices.ddb-operations.tickets.book_ticket.lambda_handler"
     }
   ]
 

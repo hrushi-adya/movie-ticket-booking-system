@@ -1,0 +1,56 @@
+{
+    "artifact": "s3://myapp-us-east-development-artifact/lambda.zip",
+    "lambda_function_default": {
+      "Runtime": "python3.11",
+      "Role": "arn:aws:iam::891377236973:role/lambda-execution-role",
+      "Timeout": 30,
+      "MemorySize": 2048,
+      "Environment": {
+        "Variables": {
+          "ENVIRONMENT": "dev",
+          "USER_TABLE": "user_info",
+          "MOVIE_TABLE": "movie_details",
+          "TICKET_TABLE": "ticket_details",
+          "TRANSACTION_TABLE": "transaction_details"
+  
+        }
+      },
+      "Layers": [
+        "arn:aws:lambda:us-east-2:891377236973:layer:MTB-python-deps-layer:1"
+      ]
+    },
+    "lambda_functions": [
+      {
+        "FunctionName": "MTB-API-SignUp-DEV",
+        "Description": "Movie API - Sign Up Operation",
+        "Handler": "microservices.auth.user_signup.lambda_handler"
+      },
+      {
+        "FunctionName": "MTB-API-ConfirmSignUp-DEV",
+        "Description": "Movie API - Confirm Sign Up Operation",
+        "Handler": "microservices.auth.confirm_user_signup.lambda_handler"
+      },
+      {
+        "FunctionName": "MTB-API-SignIn-DEV",
+        "Description": "Movie API - Sign In Operation",
+        "Handler": "microservices.auth.user_signin.lambda_handler"
+      },
+      {
+        "FunctionName": "MTB-API-AddMovie-DEV",
+        "Description": "Movie API - Add Movie Operation",
+        "Handler": "microservices.ddb-operations.movie.add_movie.lambda_handler"
+      },
+      {
+        "FunctionName": "MTB-API-BookTicket-DEV",
+        "Description": "Movie API - Book Ticket Operation",
+        "Handler": "microservices.ddb-operations.tickets.book_ticket.lambda_handler"
+      },
+      {
+        "FunctionName": "MTB-API-MovieOperations-DEV",
+        "Description": "Movie API - Movie CRUD Operation",
+        "Handler": "microservices.ddb-operations.movie.movie.lambda_handler"
+      }
+    ]
+  
+  }
+  

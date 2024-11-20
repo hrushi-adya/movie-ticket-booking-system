@@ -41,7 +41,7 @@ def lambda_handler(event, context):
     user = put_user_to_table(user_id, email_id, phone, profile_type, first_name, last_name)
 
     return SimpleResponse({
-        'user': user
+        'success': 200
     })
 
 

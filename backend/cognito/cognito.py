@@ -19,6 +19,11 @@ class CognitoIdentityProviderWrapper:
         d2 = base64.b64encode(dig).decode()
         return d2
 
+    def calculate_secret_hash(self, username):
+        message = username + self.client_id
+        digest = hmac.new(self.client_secret.encode(), message.encode(), hashlib.sha256).digest()
+        return base64.b64encode(digest).decode()
+    
     def __init__(self, cognito_idp_client, user_pool_id, client_id, client_secret=None):
         """
         :param cognito_idp_client: A Boto3 Amazon Cognito Identity Provider client.

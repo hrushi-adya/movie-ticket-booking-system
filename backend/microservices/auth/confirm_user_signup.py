@@ -71,7 +71,7 @@ def verify_sign_up_user(code:str, user_id:str):
                                      client_id = client_id, client_secret = client_secret)
     
     try:
-        response = cognito.confirm_sign_up(code, user_id)
+        response = cognito.confirm_user_sign_up(code, user_id)
     except ClientError as err:
         error_message = err.response['Error']['Message']
         logger.info(err.response['Error']['Message'])
