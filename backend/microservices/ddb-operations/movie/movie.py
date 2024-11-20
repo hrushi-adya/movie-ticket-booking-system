@@ -1,7 +1,12 @@
 import json
+import logging
 from uuid import uuid4
 import boto3
 from botocore.exceptions import ClientError
+from json import JSONDecodeError
+
+logger = logging.getLogger()
+logger.setLevel(logging.INFO)
 
 def lambda_handler(event, context):
     print("Event: ", event)
@@ -9,9 +14,16 @@ def lambda_handler(event, context):
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
     logger.info(json.dumps(event))
-
+    http_method = event['httpMethod']
     try:
-        body = json.loads(event['body'])
+        if http_method == 'POST':
+            body = json.loads(event['body'])
+        elif http_method == 'GET':
+            body = json.loads(event['body'])
+            if body.get('movie_id') is not None:
+                movie_id = body['movie_id']
+                movie = get_movie(movie_id)
+                return movie
     except JSONDecodeError as e:
         raise JSONDecodeError('Error when decoding json body', inner=e)
     except TypeError as e:
@@ -48,7 +60,6 @@ def lambda_handler(event, context):
         'success': 200
     })
 
-
 def update_movie(movie_id, movie_details):
     # Initialize a session using Amazon DynamoDB
     session = boto3.Session(
@@ -76,18 +87,3 @@ def update_movie(movie_id, movie_details):
         print(e.response['Error']['Message'])
         return None
 
-# Example usage
-if __name__ == "__main__":
-    table_name = 'Movies'
-    movie_id = '123'
-    movie_details = {
-        'title': 'Inception',
-        'director': 'Christopher Nolan',
-        'release_year': 2010
-    }
-    response = update_movie(table_name, movie_id, movie_details)
-    if response:
-        print("PutItem succeeded:")
-        print(response)
-    else:
-        print("PutItem failed.")

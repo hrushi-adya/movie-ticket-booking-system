@@ -5,12 +5,7 @@ from util.utilities import generate_utc_timestamp, update
 
 
 def put_user(user: dict):
-    """
-    Put (create) a new user
-
-    :param user:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
@@ -36,12 +31,7 @@ def put_user(user: dict):
         raise Exception('Error querying DynamoDB when put an user')
 
 def get_user_by_key(user_id: str, email: str):
-    """
-    Get an user by key
-    :param profile_type:
-    :param profile_id:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table(os.environ.get("USER_TABLE"))
@@ -55,12 +45,7 @@ def get_user_by_key(user_id: str, email: str):
         raise Exception('Error while getting user from table')
 
 def update_user(user: dict):
-    """
-    Update an existing user
-
-    :param user:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table(os.environ.get("USER_TABLE"))
@@ -94,12 +79,7 @@ def update_user(user: dict):
 
 
 def put_movie(movie: dict):
-    """
-    Add (create) a new movie
-
-    :param user:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
@@ -124,32 +104,8 @@ def put_movie(movie: dict):
     except Exception as e:
         raise Exception('Error querying DynamoDB when put a movie')
 
-def get_movie_by_key(movie_id: str):
-    """
-    Get an movie by key
-    :param profile_type:
-    :param profile_id:
-    :return:
-    """
-    try:
-        dynamodb = boto3.resource('dynamodb')
-        table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
-        dynamodb_res = table.get_item(Key={'movie_id': movie_id})
-        if 'Item' not in dynamodb_res:
-            return None
-        item = dynamodb_res['Item']
-        
-        return item
-    except Exception as e:
-        raise Exception('Error while getting movie from table')
-
 def put_ticket(ticket: dict):
-    """
-    Put (create) a new ticket
-
-    :param user:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
@@ -175,12 +131,7 @@ def put_ticket(ticket: dict):
         raise Exception('Error querying DynamoDB when put a ticket')
 
 def put_transaction(transaction: dict):
-    """
-    Put (create) a new transaction
-
-    :param user:
-    :return:
-    """
+    
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
@@ -204,3 +155,23 @@ def put_transaction(transaction: dict):
         }
     except Exception as e:
         raise Exception('Error querying DynamoDB when put a transaction')
+
+def get_movie(movie_id):
+    dynamodb = boto3.resource('dynamodb')
+       
+    table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
+
+    try:
+        response = table.get_item(
+            Key={
+                'movie_id': movie_id
+            }
+        )
+        if 'Item' in response:
+            return response['Item']
+        else:
+            return None
+    except Exception as e:
+        print(e.response['Error']['Message'])
+        return None
+    

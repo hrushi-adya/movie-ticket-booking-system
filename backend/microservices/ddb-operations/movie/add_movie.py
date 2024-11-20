@@ -15,9 +15,11 @@ def lambda_handler(event, context):
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
     logger.info(json.dumps(event))
+    http_method = event['httpMethod']
 
     try:
-        body = json.loads(event['body'])
+        if http_method == 'POST':        
+            body = json.loads(event['body'])
     except JSONDecodeError as e:
         raise JSONDecodeError('Error when decoding json body', inner=e)
     except TypeError as e:
@@ -38,6 +40,7 @@ def lambda_handler(event, context):
 
     movie = add_movie(movie_id, movie_name, movie_description, genre, movie_director, 
                       release_date, ticket_price, movie_length, movie_thumbnail, movie_available, movie_showtimes)
+    # Add method to upload movie thumbnail to S3 bucket
 
     return 200
 
@@ -65,3 +68,12 @@ def add_movie(movie_id, movie_name, movie_description, genre, movie_director,
 
     return movie
 
+# Add S3 Put Object method to upload movie thumbnail to S3 bucket
+def add_movie_thumbnail(movie_thumbnail):
+    s3 = boto3.client('s3')
+    bucket_name = 'movie-thumbnail-bucket'
+    s3.put_object(Bucket=bucket_name, Key=movie_thumbnail)
+
+    return movie_thumbnail
+
+# Add SNS Publish method to send notification to all users for new movie release

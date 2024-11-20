@@ -36,7 +36,7 @@ def lambda_handler(event, context):
 
     add_ticket(ticket_id, ticket_price, ticket_quantity, ticket_showtime, ticket_movie_id, ticket_user_id, ticket_status, ticket_transaction_id, ticket_payment_status)
     add_transaction(ticket_transaction_id, ticket_price, ticket_showtime, ticket_payment_status, ticket_user_id)
-    
+    # Add method to send notification user for ticket booking using AWS SNS Service
     return 200
 
 def add_ticket(ticket_id, ticket_price, ticket_quantity, ticket_showtime, ticket_movie_id, ticket_user_id, ticket_status, ticket_transaction_id, ticket_payment_status):
