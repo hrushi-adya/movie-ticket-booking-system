@@ -13,8 +13,6 @@ from util import dynamodb_utilities
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
-
-
 def lambda_handler(event, context):
     print("Event: ", event)
     if 'httpMethod' not in event:
@@ -38,7 +36,8 @@ def lambda_handler(event, context):
     last_name = body["last_name"]
 
     sign_up_user(user_id, profile_type, password, email_id, phone)
-    user = put_user_to_table(user_id, email_id, phone, profile_type, first_name, last_name)
+    #handle password and email id validation code in react js
+    user = put_user_to_table(user_id, password, email_id, phone, profile_type, first_name, last_name)
 
     return SimpleResponse({
         'success': 200
@@ -68,10 +67,11 @@ def sign_up_user(user_id: str, profile_type: str, password: str, email_id: str, 
 
 
 # Add User API Call
-def put_user_to_table(user_id: str, email_id: str, phone: str,
+def put_user_to_table(user_id: str, password: str, email_id: str, phone: str,
                       profile_type: str, first_name: str, last_name: str):
     user = {}
     user["user_id"] = user_id
+    user["password"] = password
     user["profile_type"] = profile_type
     user["first_name"] = first_name
     user["last_name"] = last_name
