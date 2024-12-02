@@ -29,6 +29,16 @@
       "FunctionName": "MTB-API-BookTicket-DEV",
       "Description": "Movie API - Book Ticket Operation",
       "Handler": "microservices.ddb-operations.tickets.book_ticket.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-SignUp-DEV",
+      "Description": "Movie API - Sign Up Operation",
+      "Handler": "microservices.auth.user_signup.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-SignIn-DEV",
+      "Description": "Movie API - Sign In Operation",
+      "Handler": "microservices.auth.user_signin.lambda_handler"
     }
   ]
 

@@ -18,7 +18,18 @@ def lambda_handler(event, context):
     if 'httpMethod' not in event:
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
-    logger.info(json.dumps(event))
+    print(json.dumps(event))
+
+    # if event['httpMethod'] == 'OPTIONS':
+    #     return {
+    #         'statusCode': 200,
+    #         'headers': {
+    #             'Access-Control-Allow-Origin': '*',
+    #             'Access-Control-Allow-Methods': 'POST, GET, OPTIONS',
+    #             'Access-Control-Allow-Headers': 'Content-Type',
+    #         },
+    #         'body': ''
+    #     }
 
     try:
         body = json.loads(event['body'])
@@ -35,13 +46,32 @@ def lambda_handler(event, context):
     first_name = body["first_name"]
     last_name = body["last_name"]
 
-    sign_up_user(user_id, profile_type, password, email_id, phone)
+    # sign_up_user(user_id, profile_type, password, email_id, phone)
     #handle password and email id validation code in react js
-    user = put_user_to_table(user_id, password, email_id, phone, profile_type, first_name, last_name)
+    try:
+        #check if user already present
+        user = dynamodb_utilities.get_user_by_key(user_id, email_id)
+        if user is not None:
+            return {
+                'statusCode': 401,
+                'body': json.dumps({'message': 'User already present'})
+            }
+        user = put_user_to_table(user_id, password, email_id, phone, profile_type, first_name, last_name)
+    except Exception as e:
+        logger.error(f'Error processing request: {e}')
+        raise Exception('Internal server error')
 
-    return SimpleResponse({
-        'success': 200
-    })
+    return {
+        'statusCode': 200,
+        'headers': {
+            'Access-Control-Allow-Origin': '*',
+            'Access-Control-Allow-Methods': 'POST, OPTIONS',
+            'Access-Control-Allow-Headers': 'Content-Type'
+        },
+        'body': json.dumps({
+            'message': 'User Sign Up Successful'
+        })
+    }
 
 
 # Sign Up User API Call

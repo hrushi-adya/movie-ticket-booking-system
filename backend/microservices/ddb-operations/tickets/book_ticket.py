@@ -34,10 +34,22 @@ def lambda_handler(event, context):
     ticket_transaction_id = body["ticket_transaction_id"]
     ticket_payment_status = body["ticket_payment_status"]
 
-    add_ticket(ticket_id, ticket_price, ticket_quantity, ticket_showtime, ticket_movie_id, ticket_user_id, ticket_status, ticket_transaction_id, ticket_payment_status)
-    add_transaction(ticket_transaction_id, ticket_price, ticket_showtime, ticket_payment_status, ticket_user_id)
+    ticket = add_ticket(ticket_id, ticket_price, ticket_quantity, ticket_showtime, ticket_movie_id, ticket_user_id, ticket_status, ticket_transaction_id, ticket_payment_status)
+    transaction = add_transaction(ticket_transaction_id, ticket_price, ticket_showtime, ticket_payment_status, ticket_user_id)
+
+    if ticket is not None and transaction is not None:
+        #send notification to user
+        pass
     # Add method to send notification user for ticket booking using AWS SNS Service
-    return 200
+    body['ticket_id'] = ticket_id
+    return {
+        'statusCode': 200,
+        'body': json.dumps({
+            'message': 'Ticket booked successfully',
+            'data': body  # Include the original input map and new ticket_id
+        })
+    }
+
 
 def add_ticket(ticket_id, ticket_price, ticket_quantity, ticket_showtime, ticket_movie_id, ticket_user_id, ticket_status, ticket_transaction_id, ticket_payment_status):
     ticket = {}

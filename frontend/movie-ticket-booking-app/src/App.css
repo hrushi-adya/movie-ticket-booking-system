@@ -1,0 +1,67 @@
+
+
+
+main {
+  margin-top: 40px; /* Adjust based on the height of your nav */
+  padding: 8px;
+  background-color: #705486;
+  min-height: calc(100vh - 60px); /* Ensures the content spans the viewport */
+  box-sizing: border-box;
+}
+
+
+nav {
+  position: fixed;
+  /* Fixes the navbar to the top */
+  top: 0;
+  /* Positions it at the top */
+  width: 100%;
+  /* Spans the width of the screen */
+  background-color: #f8f5f5;
+  /* Adds a background color */
+  color: rgb(17, 17, 17);
+  /* Text color */
+  display: flex;
+  /* Makes it a flex container */
+  justify-content: space-between;
+  /* Pushes elements to the edges */
+  align-items: center;
+  /* Vertically aligns items */
+  padding: 10px 20px;
+  /* Adds padding around the navbar */
+  z-index: 1000;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+}
+
+nav .nav-links {
+  /* margin-left: auto;
+  display: flex;
+  gap: 15px;
+  Adds spacing between links */
+  text-decoration: none;
+  color: #333333;
+  font-size: 1rem;
+  padding: 5px 10px;
+  transition: color 0.3s;
+}
+
+nav a {
+  text-decoration: none;
+  color: rgb(10, 10, 10);
+  font-size: 1rem;
+  padding: 5px 15px; /* Balanced padding for better spacing */
+  text-align: center;
+  white-space: nowrap; /* Prevents text from wrapping */
+}
+
+nav a:hover {
+  color: #ec1818;
+}
+
+.nav-brand {
+  font-size: 1.5rem;
+  font-weight: bold;
+  color: #000000;
+  text-align: center;
+  justify-content: flex-start;
+}

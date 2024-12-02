@@ -6,6 +6,8 @@ from cognito import CognitoIdentityProviderWrapper
 from botocore.exceptions import ClientError
 import boto3
 
+from util.dynamodb_utilities import get_user_by_key
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -24,10 +26,25 @@ def lambda_handler(event, context):
                 if all(k in body for k in ('user_id', 'password')):
                     email = body['user_id']
                     password = body['password']
-                    response = sign_in_user(email, password)
-                    return SimpleResponse({
-                        'sign_in_status': response
-                    })
+                    # response = sign_in_user(email, password)
+                    user = get_user_by_key(email, email)
+                    if user is None:
+                        raise Exception('User does not exist')
+                    elif user['user_id'] == email and user['password'] == password:
+                        return {
+                            'statusCode': 200,
+                            'body': json.dumps({
+                                'message': 'User Logged In Successully',
+                                'data': user 
+                            })
+                        }
+                    else:
+                        return {
+                            'statusCode': 401,
+                            'body': json.dumps({
+                                'message': 'Incorrect username or password'
+                            })
+                        }
                 else:
                     Exception('Inaproppriate request body to sign in user')    
         except Exception as e:
