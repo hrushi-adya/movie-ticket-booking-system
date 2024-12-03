@@ -58,6 +58,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
 
             if (response.ok) {
                 console.log('Book Ticket Result:', result);
+                alert('Movie Ticket Booking successful!');
                 navigate('/');
                 setResponseMessage('Booking successful!');
             } else {

@@ -29,6 +29,11 @@
       "FunctionName": "MTB-API-AddMovie-DEV",
       "Description": "Movie API - Add Movie Operation",
       "Handler": "microservices.ddb-operations.movie.add_movie.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-Movie-DEV",
+      "Description": "Movie API - Add Movie Operation",
+      "Handler": "microservices.ddb-operations.movie.movie.lambda_handler"
     }
   ]
 

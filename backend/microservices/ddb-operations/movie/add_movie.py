@@ -34,7 +34,7 @@ def lambda_handler(event, context):
     release_date = body["release_date"]
     ticket_price = body["ticket_price"]
     movie_length = body["movie_length"]
-    movie_thumbnail = body["movie_thumbnail"]
+    movie_thumbnail = "https://via.placeholder.com/300x200?text={movie_name}".format(movie_name=movie_name)
     movie_available = body["movie_available"]
     movie_showtimes = body["movie_showtimes"]
 

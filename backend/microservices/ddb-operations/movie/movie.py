@@ -5,6 +5,9 @@ import boto3
 from botocore.exceptions import ClientError
 from json import JSONDecodeError
 
+from util.dynamodb_utilities import delete_movie, get_movies
+from util.utilities import decimal_to_native
+
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
 
@@ -14,51 +17,78 @@ def lambda_handler(event, context):
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
     logger.info(json.dumps(event))
-    http_method = event['httpMethod']
+    http_method = event["httpMethod"]
+
     try:
-        if http_method == 'POST':
-            body = json.loads(event['body'])
-        elif http_method == 'GET':
-            body = json.loads(event['body'])
-            if body.get('movie_id') is not None:
-                movie_id = body['movie_id']
-                movie = get_movie(movie_id)
-                return movie
+        if http_method == "GET":
+            movies = get_movies()
+            movies = decimal_to_native(movies)
+            return {
+                'statusCode': 200,
+                'body': json.dumps({
+                    'movies': movies # Include the original input map and new ticket_id
+                    # 'email_response': response
+                })
+            }   
+        elif http_method == "PUT":
+            print("Updating Movies")
+        elif http_method == "DELETE":
+            movie_id = event['queryStringParameters']['movie_id']
+            response = delete_movie(movie_id)
+            if response:
+                return {
+                    'statusCode': 200,
+                    'body': json.dumps({
+                        'message': 'Movie deleted successfully'
+                    })
+                }
+            else:
+                return {
+                    'statusCode': 500,
+                    'body': json.dumps({
+                        'message': 'Error deleting movie'
+                    })
+                }
+
     except JSONDecodeError as e:
         raise JSONDecodeError('Error when decoding json body', inner=e)
-    except TypeError as e:
-        raise TypeError('Error when decoding json body', inner=e)
+    except Exception as e:
+        raise Exception('Error when performing GET API', e)
 
     # movie dictionary 
-    movie_id = uuid4().hex
-    movie_name = body["movie_name"]
-    movie_description = body["movie_description"]
-    genre = body["genre"]
-    movie_director = body["movie_director"]
-    release_date = body["release_date"]
-    ticket_price = body["ticket_price"]
-    movie_length = body["movie_length"]
-    movie_thumbnail = body["movie_thumbnail"]
-    movie_available = body["movie_available"]
+    # movie_name = body["movie_name"]
+    # movie_description = body["movie_description"]
+    # genre = body["genre"]
+    # movie_director = body["movie_director"]
+    # release_date = body["release_date"]
+    # ticket_price = body["ticket_price"]
+    # movie_length = body["movie_length"]
+    # movie_thumbnail = body["movie_thumbnail"]
+    # movie_available = body["movie_available"]
 
-    movie = {}
-    movie['movie_id'] = movie_id
-    movie['movie_name'] = movie_name
-    movie['movie_description'] = movie_description
-    movie['genre'] = genre
-    movie['movie_director'] = movie_director
-    movie['release_date'] = release_date
-    movie['ticket_price'] = ticket_price
-    movie['movie_length'] = movie_length
-    movie['movie_thumbnail'] = movie_thumbnail
-    movie['movie_available'] = movie_available
+    # movie = {}
+    # movie['movie_id'] = movie_id
+    # movie['movie_name'] = movie_name
+    # movie['movie_description'] = movie_description
+    # movie['genre'] = genre
+    # movie['movie_director'] = movie_director
+    # movie['release_date'] = release_date
+    # movie['ticket_price'] = ticket_price
+    # movie['movie_length'] = movie_length
+    # movie['movie_thumbnail'] = movie_thumbnail
+    # movie['movie_available'] = movie_available
 
    
-    movie = update_movie(movie_id, movie)
+    # movie = update_movie(movie_id, movie)
 
-    return SimpleResponse({
-        'success': 200
-    })
+    return {
+            'statusCode': 200,
+            'body': json.dumps({
+                'message': 'Ticket booked successfully',
+                'data1': json.dumps(movies) # Include the original input map and new ticket_id
+                # 'email_response': response
+            })
+    }
 
 def update_movie(movie_id, movie_details):
     # Initialize a session using Amazon DynamoDB
@@ -72,7 +102,7 @@ def update_movie(movie_id, movie_details):
     dynamodb = session.resource('dynamodb')
 
     # Select your DynamoDB table
-    table = dynamodb.Table(table_name)
+    table = dynamodb.Table()
 
     try:
         # Put item into the table

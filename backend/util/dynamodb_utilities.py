@@ -156,6 +156,7 @@ def put_transaction(transaction: dict):
     except Exception as e:
         raise Exception('Error querying DynamoDB when put a transaction')
 
+# Movie Methods
 def get_movie(movie_id):
     dynamodb = boto3.resource('dynamodb')
        
@@ -174,4 +175,28 @@ def get_movie(movie_id):
     except Exception as e:
         print(e.response['Error']['Message'])
         return None
-    
+
+def get_movies():
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
+
+    try:
+        response = table.scan()
+        return response['Items']
+    except Exception as e:
+        print(e.response['Error']['Message'])
+        return None
+
+def delete_movie(movie_id):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
+    try:
+        response = table.delete_item(
+            Key={
+                'movie_id': movie_id
+            }
+        )
+        return response
+    except Exception as e:
+        print(e.response['Error']['Message'])
+        return None
