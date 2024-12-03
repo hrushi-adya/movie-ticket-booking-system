@@ -73,8 +73,8 @@ const Home: React.FC = () => {
                             />
                         ))}
                     </div>
-                    <h1>Welcome Back, {username}!</h1>
-                    <p>Thank you for logging in. Explore your dashboard below.</p>
+                    {/* <h1>Welcome Back, {username}!</h1>
+                    <p>Thank you for logging in. Explore your dashboard below.</p> */}
                 </div>
             ) : (
                 <div>

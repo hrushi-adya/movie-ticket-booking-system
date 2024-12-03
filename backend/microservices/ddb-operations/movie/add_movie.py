@@ -40,10 +40,15 @@ def lambda_handler(event, context):
 
     movie = add_movie(movie_id, movie_name, movie_description, genre, movie_director, 
                       release_date, ticket_price, movie_length, movie_thumbnail, movie_available, movie_showtimes)
-    # Add method to upload movie thumbnail to S3 bucket
-
-    return 200
-
+    
+    return {
+        'statusCode': 200,
+        'body': json.dumps({
+            'message': 'Ticket booked successfully',
+            'data1': movie
+            # 'email_response': response
+        })
+    }
 def add_movie(movie_id, movie_name, movie_description, genre, movie_director, 
               release_date, ticket_price, movie_length, movie_thumbnail, movie_available, movie_showtimes):
     movie = {}
@@ -60,12 +65,12 @@ def add_movie(movie_id, movie_name, movie_description, genre, movie_director,
     movie['movie_showtimes'] = movie_showtimes
 
     try:
-        dynamodb_utilities.put_movie(movie)
+        movie = dynamodb_utilities.put_movie(movie)
     except ClientError as err:
         error_message = err.response['Error']['Message']
         logger.info(err.response['Error']['Message'])
         raise Exception(error_message)
-
+    
     return movie
 
 # Add S3 Put Object method to upload movie thumbnail to S3 bucket

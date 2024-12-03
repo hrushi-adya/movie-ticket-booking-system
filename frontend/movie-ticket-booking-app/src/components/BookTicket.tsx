@@ -9,20 +9,66 @@ interface BookTicketProps {
 }
 
 const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
-
+    const [responseMessage, setResponseMessage] = useState<string | null>(null);
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const location = useLocation();
     const { username } = useAuth();
     const { title, description } = location.state as { title: string; description: string };
-
+    const [formData, setFormData] = useState({ theatre: '', name: username || '', seats: '', showTime: '', ticketPrice: '15', movieName: title ||'' });
     const [name, setName] = useState(username ||'');
     const [theatre, setTheatre] = useState('');
     const [seats, setSeats] = useState(1);
+    const [movieName, setMovieName] = useState('');
     const navigate = useNavigate();
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        setFormData({ ...formData, [e.target.name]: e.target.value });
+    };
+
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-        alert(`Ticket booked successfully for ${movie.title}!`);
-        navigate('/'); // Redirect back to the home page
+        console.log('formData', formData);
+
+        const payload = {
+            ticket_price: formData.ticketPrice,
+            ticket_quantity: formData.seats,
+            ticket_showtime: formData.showTime,
+            ticket_movie_id: formData.movieName,
+            ticket_theater_id: formData.theatre,
+            ticket_user_id: formData.name,
+            ticket_status: 'booked',
+            ticket_transaction_id: 'dummy-transaction-id',
+            ticket_payment_status: 'payment-completed',
+        };
+
+        console.log('payload', payload);
+        const apiGatewayUrl = "https://858a5if44a.execute-api.us-east-2.amazonaws.com/dev/MTB-API-BookTicket-DEV"
+
+        try {
+            const response = await fetch(apiGatewayUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload),
+            });
+
+            const result = await response.json();
+
+            if (response.ok) {
+                console.log('Book Ticket Result:', result);
+                navigate('/');
+                setResponseMessage('Booking successful!');
+            } else {
+                setErrorMessage(result.message || 'Booking failed. Please try again.');
+            }
+        } catch (error) {
+            setErrorMessage('Network error. Please try again.');
+        } finally {
+            setIsLoading(false);
+        }
+
     };
 
     return (
@@ -36,11 +82,11 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                                 <label>Theatre:</label>
                             </td>
                             <td>
-                                <select value={theatre} onChange={(e) => setTheatre(e.target.value)} required>
+                                <select value={theatre} onChange={(e) => { setTheatre(e.target.value); setFormData({ ...formData, theatre: e.target.value }); }} required>
                                     <option value="">Select Theatre</option>
-                                    <option value="Theatre 1">Theatre 1</option>
-                                    <option value="Theatre 2">Theatre 2</option>
-                                    <option value="Theatre 3">Theatre 3</option>
+                                    <option value="Lees Summit">Lees Summit</option>
+                                    <option value="Warrensburg">Warrensburg</option>
+                                    <option value="Kansas City">Kansas City</option>
                                 </select>
                             </td>
                         </tr>
@@ -49,12 +95,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                                 <label>Your Name:</label>
                             </td>
                             <td>
-                                <input
-                                    type="text"
-                                    value={name}
-                                    onChange={(e) => setName(e.target.value)}
-                                    required
-                                />
+                                <input type="text" name="name" value={formData.name} onChange={handleChange} required />
                             </td>
                         </tr>
                         <tr>
@@ -62,13 +103,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                                 <label>Number of Seats:</label>
                             </td>
                             <td>
-                                <input
-                                    type="number"
-                                    value={seats}
-                                    onChange={(e) => setSeats(Number(e.target.value))}
-                                    min="1"
-                                    required
-                                />
+                                <input type="text" name="seats" value={formData.seats} onChange={handleChange} required />
                             </td>
                         </tr>
                     <tr>
@@ -76,7 +111,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                             <label>Movie Name:</label>
                         </td>
                         <td>
-                            <input type="text" value={movie.title} readOnly />
+                                <input type="text" name="movieName" value={formData.movieName} onChange={handleChange} required />
                         </td>
                     </tr>
                     <tr>
@@ -84,7 +119,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                             <label>Show Time:</label>
                         </td>
                         <td>
-                            <input type="text" required />
+                                <input type="text" name="showTime" value={formData.showTime} onChange={handleChange} required />
                         </td>
                     </tr>
                     <tr>
@@ -92,7 +127,7 @@ const BookTicket: React.FC<BookTicketProps> = ({ movie }) => {
                             <label>Ticket Price:</label>
                         </td>
                         <td>
-                            <input type="number" min="0" step="0.01" required />
+                                <input type="text" name="ticketPrice" value={formData.ticketPrice} onChange={handleChange} required />
                         </td>
                     </tr>
                     </tbody>

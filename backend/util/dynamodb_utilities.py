@@ -109,7 +109,7 @@ def put_ticket(ticket: dict):
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
-        print(f"User Key assigned: {ticket['ticket_id']}")
+        print(f"Ticket Key assigned: {ticket['ticket_id']}")
 
         # Update metadata
         timestamp = generate_utc_timestamp()

@@ -12,10 +12,24 @@ const MovieCard: React.FC<MovieCardProps> = ({ title, description, image, rating
 
     const navigate = useNavigate();
     const handleBook = () => {
-        navigate('/book', { state: { title, description } });
+        navigate('/book', { 
+            state: { 
+                title, 
+                description, 
+                image, 
+                rating 
+            } 
+        });
     };
     const handleSelect = () => {
-        navigate('/select', { state: { title, description } });
+        navigate('/select', { 
+            state: { 
+                title, 
+                description, 
+                image, 
+                rating 
+            } 
+        });
     } 
 
 
