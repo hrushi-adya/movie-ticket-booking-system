@@ -26,7 +26,7 @@ def lambda_handler(event, context):
         raise TypeError('Error when decoding json body', inner=e)
 
     # movie dictionary 
-    movie_id = uuid4().hex
+    # movie_id = uuid4().hex
     movie_name = body["movie_name"]
     movie_description = body["movie_description"]
     genre = body["genre"]
@@ -34,25 +34,24 @@ def lambda_handler(event, context):
     release_date = body["release_date"]
     ticket_price = body["ticket_price"]
     movie_length = body["movie_length"]
-    movie_thumbnail = "https://via.placeholder.com/300x200?text={movie_name}".format(movie_name=movie_name)
     movie_available = body["movie_available"]
     movie_showtimes = body["movie_showtimes"]
 
-    movie = add_movie(movie_id, movie_name, movie_description, genre, movie_director, 
-                      release_date, ticket_price, movie_length, movie_thumbnail, movie_available, movie_showtimes)
+    movie = add_movie(movie_name, movie_description, genre, movie_director, 
+                      release_date, ticket_price, movie_length, movie_available, movie_showtimes)
     
     return {
         'statusCode': 200,
         'body': json.dumps({
-            'message': 'Ticket booked successfully',
+            'message': 'Movie Added successfully',
             'data1': movie
             # 'email_response': response
         })
     }
-def add_movie(movie_id, movie_name, movie_description, genre, movie_director, 
-              release_date, ticket_price, movie_length, movie_thumbnail, movie_available, movie_showtimes):
+def add_movie(movie_name, movie_description, genre, movie_director, 
+              release_date, ticket_price, movie_length, movie_available, movie_showtimes):
     movie = {}
-    movie['movie_id'] = movie_id
+    # movie['movie_id'] = movie_id
     movie['movie_name'] = movie_name
     movie['movie_description'] = movie_description
     movie['genre'] = genre
@@ -60,10 +59,11 @@ def add_movie(movie_id, movie_name, movie_description, genre, movie_director,
     movie['release_date'] = release_date
     movie['ticket_price'] = ticket_price
     movie['movie_length'] = movie_length
-    movie['movie_thumbnail'] = movie_thumbnail
     movie['movie_available'] = movie_available
     movie['movie_showtimes'] = movie_showtimes
-
+    movie['movie_thumbnail'] = f"https://via.placeholder.com/300x200?text={movie_name}"
+    movie['total_sales'] = 0
+    
     try:
         movie = dynamodb_utilities.put_movie(movie)
     except ClientError as err:

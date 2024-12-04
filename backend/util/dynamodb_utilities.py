@@ -26,7 +26,7 @@ def put_user(user: dict):
 
         return {
             'key': user['user_id']
-        }
+        }   
     except Exception as e:
         raise Exception('Error querying DynamoDB when put an user')
 
@@ -83,7 +83,7 @@ def put_movie(movie: dict):
     try:
         dynamodb = boto3.resource('dynamodb')
         # hexed_user_key = generate_unique_key('user_key_cur', hexing=True)
-        print(f"User Key assigned: {movie['movie_id']}")
+        print(f"User Key assigned: {movie['movie_name']}")
 
         # Update metadata
         timestamp = generate_utc_timestamp()
@@ -99,7 +99,7 @@ def put_movie(movie: dict):
         })
 
         return {
-            'key': movie['movie_id']
+            'key': movie['movie_name']
         }
     except Exception as e:
         raise Exception('Error querying DynamoDB when put a movie')
@@ -187,16 +187,38 @@ def get_movies():
         print(e.response['Error']['Message'])
         return None
 
-def delete_movie(movie_id):
+def delete_movie(movie_name):
     dynamodb = boto3.resource('dynamodb')
     table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
     try:
         response = table.delete_item(
             Key={
-                'movie_id': movie_id
+                'movie_name': movie_name
             }
         )
         return response
     except Exception as e:
         print(e.response['Error']['Message'])
         return None
+
+def update_movie(movie_name:str, movie: dict):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(os.environ.get("MOVIE_TABLE"))
+    
+    update_expression = "SET " + ", ".join(f"{key} = :{key}" for key in movie.keys())
+    expression_attribute_values = {f":{key}": value for key, value in movie.items()}
+
+    try:
+        response = table.update_item(
+            Key={
+                'movie_name': movie_name,
+            },
+            UpdateExpression=update_expression,
+            ExpressionAttributeValues=expression_attribute_values,
+            ReturnValues="UPDATED_NEW"
+        )
+        return response
+    except Exception as e:
+        print(e.response['Error']['Message'])
+        return None
+    

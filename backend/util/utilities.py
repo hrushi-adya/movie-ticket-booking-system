@@ -25,3 +25,28 @@ def decimal_to_native(obj):
     if isinstance(obj, dict):
         return {k: decimal_to_native(v) for k, v in obj.items()}
     return obj
+
+def filter_params(body):
+    movie_description = body["movie_description"] if "movie_description" in body else None
+    genre = body["genre"] if "genre" in body else None
+    movie_director = body["movie_director"] if "movie_director" in body else None
+    release_date = body["release_date"] if  "release_date" in body else None
+    ticket_price = body["ticket_price"] if "ticket_price" in body else None
+    movie_length = body["movie_length"] if  "movie_length" in body else None
+    movie_available = body["movie_available"] if "movie_available" in body else None
+    movie_showtimes = body["movie_showtimes"] if "movie_showtimes" in body else None
+
+    movie = {}
+    movie['movie_description'] = movie_description
+    movie['genre'] = genre
+    movie['movie_director'] = movie_director
+    movie['release_date'] = release_date
+    movie['ticket_price'] = ticket_price
+    movie['movie_length'] = movie_length
+    movie['movie_available'] = movie_available
+    movie['movie_showtimes'] = movie_showtimes
+
+    params = ['movie_description', 'genre', 'movie_director', 'release_date', 'ticket_price', 'movie_length', 'movie_available', 'movie_showtimes']
+    filtered_movie = {key: movie[key] for key in params if key in movie and movie[key] is not None}
+
+    return filtered_movie
