@@ -2,6 +2,7 @@ import json
 import logging
 from json import JSONDecodeError
 
+from model.LambdaResponse import DecimalEncoder
 from util.dynamodb_utilities import get_user_by_key
 
 logger = logging.getLogger()
@@ -21,13 +22,12 @@ def lambda_handler(event, context):
                 user_id = event['queryStringParameters']['user_id']
                 print("user_id ", user_id)
                 user = get_user_by_key(user_id, user_id)
+                print("user: ", user)
                 response = user['watch_list']
+                print("response: ", response)
                 return {
                     'statusCode': 200,
-                    'body': json.dumps({
-                        'movies': response # Include the original input map and new ticket_id
-                        # 'email_response': response
-                    })
+                    'body':  json.dumps(response, cls=DecimalEncoder)
                 }
     except JSONDecodeError as e:
         raise JSONDecodeError('Error when decoding json body', inner=e)
