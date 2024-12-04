@@ -58,75 +58,36 @@ def lambda_handler(event, context):
         elif http_method == "DELETE":
             movie_name = event['queryStringParameters']['movie_name']
             print("movie name: ", movie_name)
-            response = delete_movie(movie_name)
-            if response:
+            # check if tickets are booked for the movie
+            movie = get_movie(movie_name)
+            if movie['ticket_booked'] == True:
                 return {
-                    'statusCode': 200,
+                    'statusCode': 400,
                     'body': json.dumps({
-                        'message': 'Movie deleted successfully'
+                        'message': 'Tickets are booked for the movie. Cannot delete the movie'
                     })
                 }
             else:
-                return {
-                    'statusCode': 500,
-                    'body': json.dumps({
-                        'message': 'Error deleting movie'
-                    })
-                }
+                response = delete_movie(movie_name)
+                if response:
+                    return {
+                        'statusCode': 200,
+                        'body': json.dumps({
+                            'message': 'Movie deleted successfully'
+                        })
+                    }
+                else:
+                    return {
+                        'statusCode': 500,
+                        'body': json.dumps({
+                            'message': 'Error deleting movie'
+                        })
+                    }
 
     except JSONDecodeError as e:
         raise JSONDecodeError('Error when decoding json body', inner=e)
     except Exception as e:
         raise Exception('Error when performing GET API', e)
 
-    # movie dictionary 
     
-    movie = {}
-    movie['movie_name'] = movie_name
-    movie['movie_description'] = movie_description
-    movie['genre'] = genre
-    movie['movie_director'] = movie_director
-    movie['release_date'] = release_date
-    movie['ticket_price'] = ticket_price
-    movie['movie_length'] = movie_length
-    movie['movie_available'] = movie_available
-    movie['movie_showtimes'] = movie_showtimes
-    
-    # movie = update_movie(movie_id, movie)
-
-    return {
-            'statusCode': 200,
-            'body': json.dumps({
-                'message': 'Ticket booked successfully',
-                'data1': json.dumps(movies) # Include the original input map and new ticket_id
-                # 'email_response': response
-            })
-    }
-
-# def update_movie(movie_id, movie_details):
-#     # Initialize a session using Amazon DynamoDB
-#     session = boto3.Session(
-#         aws_access_key_id='YOUR_ACCESS_KEY',
-#         aws_secret_access_key='YOUR_SECRET_KEY',
-#         region_name='YOUR_REGION'
-#     )
-
-#     # Initialize DynamoDB resource
-#     dynamodb = session.resource('dynamodb')
-
-#     # Select your DynamoDB table
-#     table = dynamodb.Table()
-
-#     try:
-#         # Put item into the table
-#         response = table.put_item(
-#             Item={
-#                 'movie_id': movie_id,
-#                 **movie_details
-#             }
-#         )
-#         return response
-#     except ClientError as e:
-#         print(e.response['Error']['Message'])
-#         return None
 

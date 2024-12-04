@@ -1,23 +1,22 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 interface MovieCardProps {
     title: string;
-    description: string;
-    image: string;
-    rating: string;
+    show_date: string;
+    ticket_quantity: string;
+    transaction_id: string
 }
 
-const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rating }) => {
+const MovieCard: React.FC<MovieCardProps> = ({ title, show_date, ticket_quantity, transaction_id }) => {
 
     const navigate = useNavigate();
     const handleBook = () => {
         navigate('/book', { 
             state: { 
                 title, 
-                description, 
-                image, 
-                rating 
+                show_date, 
+                ticket_quantity, 
+                transaction_id 
             } 
         });
     };
@@ -25,9 +24,9 @@ const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rati
         navigate('/select', { 
             state: { 
                 title, 
-                description, 
-                image, 
-                rating 
+                show_date, 
+                ticket_quantity, 
+                transaction_id 
             } 
         });
     } 
@@ -35,13 +34,11 @@ const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rati
 
     return (
         <div style={cardStyle}>
-            <img src={image} alt={title} style={imageStyle} />
             <div style={cardContentStyle}>
                 <h3>{title}</h3>
-                <p>{description}</p>
-                <p><strong>Rating:</strong> {rating}</p>
-                <button style={buttonStyle} onClick={handleBook}>Book</button>
-                <button style={buttonStyle} onClick={handleSelect}>Select</button>
+                <p>{show_date}</p>
+                <p>Ticket Quantity {ticket_quantity}</p>
+                <p>Transaction ID {transaction_id}</p>
             </div>
         </div>
     );
@@ -76,4 +73,4 @@ const buttonStyle: React.CSSProperties = {
     fontSize: '16px',
 };
 
-export default MyShowsCard;
+export default MovieCard;

@@ -1,6 +1,6 @@
 import json
 from model import constants
-from model.LambdaResponse import SimpleResponse
+from model.LambdaResponse import DecimalEncoder, SimpleResponse
 import logging
 from cognito import CognitoIdentityProviderWrapper
 from botocore.exceptions import ClientError
@@ -34,9 +34,9 @@ def lambda_handler(event, context):
                         return {
                             'statusCode': 200,
                             'body': json.dumps({
-                                'message': 'User Logged In Successully',
-                                'data': user 
-                            })
+                            'message': 'User Logged In Successfully',
+                            'data': user  # Use DecimalEncoder in the outer json.dumps
+                            }, cls=DecimalEncoder)
                         }
                     else:
                         return {

@@ -18,7 +18,7 @@ def lambda_handler(event, context):
         raise RuntimeError('No HttpMethod')
     logger.info("Event:")
     logger.info(json.dumps(event))
-
+    
     try:
         body = json.loads(event['body'])
     except JSONDecodeError as e:
@@ -29,7 +29,7 @@ def lambda_handler(event, context):
     #ticket details dictionary
     ticket_id = uuid4().hex
     ticket_price = body["ticket_price"]
-    ticket_quantity = body["ticket_quantity"]
+    ticket_quantity = int(body["ticket_quantity"])
     ticket_showtime = body["ticket_showtime"]
     ticket_movie_id = body["ticket_movie_id"]
     ticket_theater_id = body["ticket_theater_id"]
@@ -114,7 +114,7 @@ def update_user_watchlist(user, movie, ticket_id):
 def update_movie_for_booking(movie, movie_id, ticket_booked, ticket_price, ticket_quantity):
     try:
         movie['total_sales'] = movie['total_sales'] + ticket_quantity
-        movie['total_tickets_business'] = movie['total_tickets_business'] + ticket_price*ticket_quantity
+        movie['total_tickets_business'] = int(movie['total_tickets_business']) + int(ticket_price)*int(ticket_quantity)
         movie['ticket_booked'] = ticket_booked
         movie.pop('movie_name')
         dynamodb_utilities.update_movie(movie_id, movie)

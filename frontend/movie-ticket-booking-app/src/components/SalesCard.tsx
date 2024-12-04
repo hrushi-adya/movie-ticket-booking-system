@@ -1,23 +1,20 @@
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
 
 interface MovieCardProps {
     title: string;
-    description: string;
-    image: string;
-    rating: string;
+    total_sales: string;
+    total_cost: string;
 }
 
-const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rating }) => {
+const SalesCard: React.FC<MovieCardProps> = ({ title, total_sales, total_cost}) => {
 
     const navigate = useNavigate();
     const handleBook = () => {
         navigate('/book', { 
             state: { 
                 title, 
-                description, 
-                image, 
-                rating 
+                total_sales, 
+                total_cost 
             } 
         });
     };
@@ -25,9 +22,8 @@ const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rati
         navigate('/select', { 
             state: { 
                 title, 
-                description, 
-                image, 
-                rating 
+                total_sales, 
+                total_cost
             } 
         });
     } 
@@ -35,13 +31,9 @@ const MyShowsCard: React.FC<MovieCardProps> = ({ title, description, image, rati
 
     return (
         <div style={cardStyle}>
-            <img src={image} alt={title} style={imageStyle} />
             <div style={cardContentStyle}>
                 <h3>{title}</h3>
-                <p>{description}</p>
-                <p><strong>Rating:</strong> {rating}</p>
-                <button style={buttonStyle} onClick={handleBook}>Book</button>
-                <button style={buttonStyle} onClick={handleSelect}>Select</button>
+                <p>{total_sales} Revenue: {total_cost}</p>
             </div>
         </div>
     );
@@ -76,4 +68,4 @@ const buttonStyle: React.CSSProperties = {
     fontSize: '16px',
 };
 
-export default MyShowsCard;
+export default SalesCard;
