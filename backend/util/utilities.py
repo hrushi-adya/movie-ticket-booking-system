@@ -50,3 +50,23 @@ def filter_params(body):
     filtered_movie = {key: movie[key] for key in params if key in movie and movie[key] is not None}
 
     return filtered_movie
+
+def update_dictionary(old_dict, new_dict):
+    for key, value in new_dict.items():
+        if value is not None:
+            old_dict[key] = value
+    return old_dict
+
+def create_watchlist_node(ticket, ticket_id):
+    movie_name = ticket['ticket_movie_id']
+    movie_tickets_quantity = ticket['ticket_quantity']
+    ticket_showtime = ticket['ticket_showtime']
+    transaction_id = ticket['ticket_transaction_id']
+
+    node = {}
+    node['movie_name'] = movie_name
+    node['ticket_quantity'] = movie_tickets_quantity
+    node['show_date'] = ticket_showtime
+    node['transaction_id'] = transaction_id
+
+    return node

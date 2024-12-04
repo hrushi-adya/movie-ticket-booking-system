@@ -34,6 +34,16 @@
       "FunctionName": "MTB-API-Movie-DEV",
       "Description": "Movie API - Add Movie Operation",
       "Handler": "microservices.ddb-operations.movie.movie.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-GetWatchList-DEV",
+      "Description": "Movie API - Get Watch List",
+      "Handler": "microservices.ddb-operations.movie.get_watch_list.lambda_handler"
+    },
+    {
+      "FunctionName": "MTB-API-SignUp-DEV",
+      "Description": "Movie API - Sign Up Operation",
+      "Handler": "microservices.auth.user_signup.lambda_handler"
     }
   ]
 

@@ -107,7 +107,8 @@ def put_user_to_table(user_id: str, password: str, email_id: str, phone: str,
     user["last_name"] = last_name
     user["email"] = email_id
     user["phone"] = phone
-    
+    user["watch_list"] = {}
+
     try:
         dynamodb_utilities.put_user(user)
     except ClientError as err:

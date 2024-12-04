@@ -36,7 +36,7 @@ def lambda_handler(event, context):
     movie_length = body["movie_length"]
     movie_available = body["movie_available"]
     movie_showtimes = body["movie_showtimes"]
-
+    
     movie = add_movie(movie_name, movie_description, genre, movie_director, 
                       release_date, ticket_price, movie_length, movie_available, movie_showtimes)
     
@@ -63,6 +63,8 @@ def add_movie(movie_name, movie_description, genre, movie_director,
     movie['movie_showtimes'] = movie_showtimes
     movie['movie_thumbnail'] = f"https://via.placeholder.com/300x200?text={movie_name}"
     movie['total_sales'] = 0
+    movie['total_tickets_business'] = 0
+    movie['ticket_booked'] = False
     
     try:
         movie = dynamodb_utilities.put_movie(movie)

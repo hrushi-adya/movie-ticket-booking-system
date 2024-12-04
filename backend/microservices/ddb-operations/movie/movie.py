@@ -6,7 +6,7 @@ from botocore.exceptions import ClientError
 from json import JSONDecodeError
 
 from util.dynamodb_utilities import delete_movie, get_movie, get_movies, update_movie
-from util.utilities import decimal_to_native, filter_params
+from util.utilities import decimal_to_native, filter_params, update_dictionary
 
 logger = logging.getLogger()
 logger.setLevel(logging.INFO)
@@ -47,6 +47,7 @@ def lambda_handler(event, context):
             body = json.loads(event['body'])
             movie_name = event['queryStringParameters']['movie_name']
             filtered_movie = filter_params(body)
+            filtered_movie = update_dictionary(get_movie(movie_name), filtered_movie)
             response = update_movie(movie_name, filtered_movie)
             return {
                     'statusCode': 200,

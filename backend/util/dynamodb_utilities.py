@@ -49,31 +49,25 @@ def update_user(user: dict):
     try:
         dynamodb = boto3.resource('dynamodb')
         table = dynamodb.Table(os.environ.get("USER_TABLE"))
-
+    
+        print("user: ", user)
         # Update metadata
-        timestamp = generate_utc_timestamp()
-        update(user, {
-            'updated_at': timestamp
+        # timestamp = generate_utc_timestamp()
+        # update(user, {
+        #     'updated_at': timestamp
+        # })
+        
+        update_expression = "SET " + ", ".join(f"{key} = :{key}" for key in user.keys())
+        expression_attribute_values = {f":{key}": value for key, value in user.items()}
+        expression_attribute_names = {f"#{key}": key for key in user.keys()} 
+        
+        response = dynamodb.Table(os.environ.get("USER_TABLE")).put_item(Item={
+            'user_id': user['user_id'],
+            'email': user['email'],
+            **user
         })
 
-        table.update_item(
-            Key={'user_id': user['user_id'], 'email': user['email']},
-            UpdateExpression="set #name = :name, #email = :email, #updated_at = :updated_at",
-            ExpressionAttributeNames={
-                '#name': 'name',
-                '#email': 'email',
-                '#updated_at': 'updated_at'
-            },
-            ExpressionAttributeValues={
-                ':name': user['name'],
-                ':email': user['email'],
-                ':updated_at': timestamp
-            }
-        )
-
-        return {
-            'key': user['user_id']
-        }
+        return response
     except Exception as e:
         raise Exception('Error updating user in DynamoDB')
 
@@ -165,13 +159,11 @@ def get_movie(movie_id):
     try:
         response = table.get_item(
             Key={
-                'movie_id': movie_id
+                'movie_name': movie_id
             }
         )
         if 'Item' in response:
             return response['Item']
-        else:
-            return None
     except Exception as e:
         print(e.response['Error']['Message'])
         return None
