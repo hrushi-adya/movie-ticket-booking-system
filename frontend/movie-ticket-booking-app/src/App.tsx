@@ -10,6 +10,7 @@ import BookTicket from './components/BookTicket';
 import MovieOperation from './components/MovieOperation/MovieOperation';
 import MyShows from './components/MyShows';
 import SalesDashboard from './components/SalesDashboard';
+import TransactionDetails from './components/TransactionDetails';
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
             <Link to="/">Home</Link>
             {isLoggedIn && userType === 'admin' && <Link to="/sales-dashboard">Sales Dashboard</Link>}
             {isLoggedIn && userType === 'admin' && <Link to="/movie-operation">Movie Operation</Link>}
+            {isLoggedIn && userType === 'admin' && <Link to="/transaction-details">Transaction Details</Link>}
             {isLoggedIn && <Link to="/movie-history">My Shows</Link>}
             {!isLoggedIn && <Link to="/signin">Sign In</Link>}
             {!isLoggedIn && <Link to="/signup">Sign Up</Link>}
@@ -48,6 +50,7 @@ function App() {
           <Route path="/sales-dashboard" element={<SalesDashboard />} />
           <Route path="/movie-operation" element={<MovieOperation />} />
           <Route path="/movie-history" element={<MyShows />} />
+          <Route path="*" element={<TransactionDetails />} />
         </Routes>
       </main>
     </div>

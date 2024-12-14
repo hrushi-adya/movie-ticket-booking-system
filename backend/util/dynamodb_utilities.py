@@ -2,6 +2,7 @@ import os
 
 import boto3
 from util.utilities import generate_utc_timestamp, update
+from boto3.dynamodb.conditions import Attr
 
 
 def put_user(user: dict):
@@ -214,3 +215,14 @@ def update_movie(movie_name:str, movie: dict):
         print(e.response['Error']['Message'])
         return None
     
+def get_transaction_details(start_date, end_date):
+    dynamodb = boto3.resource('dynamodb')
+    table = dynamodb.Table(os.environ.get("TRANSACTION_TABLE"))
+    try:
+        response = table.scan(
+            FilterExpression=Attr('transaction_date').between(start_date, end_date)
+        )
+        return response['Items']
+    except Exception as e:
+        print(e.response['Error']['Message'])
+        return None

@@ -1,4 +1,4 @@
-# dynamodb operation to read user data and compare username and password with input
+ # dynamodb operation to read user data and compare username and password with input
 import boto3
 
 

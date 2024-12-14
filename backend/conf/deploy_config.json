@@ -21,9 +21,9 @@
   },
   "lambda_functions": [
     {
-      "FunctionName": "MTB-API-BookTicket-DEV",
-      "Description": "Movie API - Book Ticket Operation",
-      "Handler": "microservices.ddb-operations.tickets.book_ticket.lambda_handler"
+      "FunctionName": "MTB-API-TransactionDetails-DEV",
+      "Description": "Movie API - Transaction Details Operation",
+      "Handler": "microservices.ddb-operations.tickets.transaction_details.lambda_handler"
     }
   ]
 
