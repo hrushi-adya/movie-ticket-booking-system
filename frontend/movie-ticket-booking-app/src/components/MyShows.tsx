@@ -11,8 +11,7 @@ const MyShows: React.FC = () => {
     const [isLoading, setIsLoading] = useState<boolean>(false);
     const [errorMessage, setErrorMessage] = useState<string | null>(null);
     const navigate = useNavigate();
-    // const state = location.state as { isLoggedIn?: boolean; username?: string };
-    // use the user name and pass it along with the request to the API to get movies for a specifc user 
+
     const apiGatewayUrl = 'https://858a5if44a.execute-api.us-east-2.amazonaws.com/dev/MTB-API-GetWatchList-DEV';
     const [movies, setMovies] = useState<any[]>([]);
 
@@ -30,18 +29,11 @@ const MyShows: React.FC = () => {
             console.log('Data:', data);
             if (response.ok) {
                 console.log('Data:', data);
-                setMovies(data); // Update state with fetched movies
+                setMovies(data);
             } else {
                 setErrorMessage(data.message || 'Failed to get WatchList from API.');
             }
             console.log("MOVIEE")
-            // movies.map((movie: any) => {
-            //     console.log("MOVIEEEE")
-            //     console.log(`Name: ${movie.movie_name}`);
-            //     console.log(`Description: ${movie.movie_description}`);
-            //     console.log(`Rating: ${movie.ticket_price}`);
-            //     console.log("EEEEIEVOM")
-            // });
         } catch (error) {
             setErrorMessage('Error calling API. Please try again later.');
         } finally {
